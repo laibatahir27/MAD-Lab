@@ -1,6 +1,6 @@
 # 📱 MAD Lab
 
-Mobile Application Development (Flutter & Dart) ki lab work ka repository.
+Mobile Application Development (Flutter & Dart)
 
 | | |
 |---|---|
