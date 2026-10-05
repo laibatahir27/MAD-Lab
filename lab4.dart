@@ -54,7 +54,7 @@ class MenuItem {
 
 //Task 4.1 class
 class OrderLog {
-  // Think 4: the underscore makes them private, so no other file can create a second log.
+  // Think 4: the underscore makes them private so no other file can create a second log.
   static OrderLog? _instance;
   final List<String> entries = [];
   OrderLog._internal();
@@ -70,12 +70,12 @@ class OrderLine {
   final int qty;
   final int total;
   final int tax;
-  // Think 5: the object is not fully built while the initializer list runs, so it cannot read total. We use item and qty instead.
+  // Think 5: the object is not fully built while the initializer list runs so it cannot read total.We use item and qty instead.
   OrderLine(this.item, this.qty)
     : total = item.price * qty,
       tax = (item.price * qty * taxPercent) ~/ 100,
       assert(qty > 0, 'qty must be positive');
-  // Think 6: grand = 5 fails because grand is only a getter. A setter is needed.
+  // Think 6: grand = 5 fails because grand is only a getter.A setter is needed.
 
   //Task 6.1
   int get grand => total + tax;
