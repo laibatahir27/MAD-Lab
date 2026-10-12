@@ -6,9 +6,16 @@ final int seed = int.parse(rollNo.substring(rollNo.length - 2));
 final int t = seed ~/ 10; // tens digit
 final int u = seed % 10; // units digit
 const List<String> titles = [
-  'Dart Basics', 'Flutter In Action', 'Data Structures', 'Operating Systems',
-  'Mobile Design', 'Clean Code', 'Algorithms Unlocked', 'Computer Networks',
-  'Database Systems', 'Software Testing',
+  'Dart Basics',
+  'Flutter In Action',
+  'Data Structures',
+  'Operating Systems',
+  'Mobile Design',
+  'Clean Code',
+  'Algorithms Unlocked',
+  'Computer Networks',
+  'Database Systems',
+  'Software Testing',
 ];
 int yearOf(int i) => 1995 + 2 * i + t; // publication year of titles[i]
 final int feePerDay = 5 + t; // late fee per day, in rupees
@@ -239,9 +246,15 @@ void step2() {
 
 void step3() {
   print('--- Step 3 ---');
-  print('Step 3: Book late fee for $daysLate days = ${mainBook().lateFee(daysLate)}');
-  print('Step 3: Magazine late fee for $daysLate days = ${mainMagazine().lateFee(daysLate)}');
-  print('Step 3: Dvd late fee for $daysLate days = ${mainDvd().lateFee(daysLate)}');
+  print(
+    'Step 3: Book late fee for $daysLate days = ${mainBook().lateFee(daysLate)}',
+  );
+  print(
+    'Step 3: Magazine late fee for $daysLate days = ${mainMagazine().lateFee(daysLate)}',
+  );
+  print(
+    'Step 3: Dvd late fee for $daysLate days = ${mainDvd().lateFee(daysLate)}',
+  );
 
   // Think: LibraryItem('x', 2000) gives an error because the class is
   // abstract. lateFee has no body, so there would be nothing to run.
@@ -303,7 +316,9 @@ void step7() {
   print('Step 7: initials of "${titles[u]}" = ${titles[u].initials}');
 
   List<LibraryItem> shelf = [mainBook(), mainMagazine(), mainDvd()];
-  print('Step 7: shelf fee for $daysLate days = ${shelf.totalLateFee(daysLate).rs}');
+  print(
+    'Step 7: shelf fee for $daysLate days = ${shelf.totalLateFee(daysLate).rs}',
+  );
 
   // Think: 72.rs is easier to read and write than rs(72), and it shows up in autocomplete when I type a dot after the number.
 }
@@ -328,8 +343,12 @@ void step9() {
   buildShelf();
   List<LibraryItem> shelf = buildShelf();
   print('Step 9: items created = ${LibraryItem.created}');
-  print('Step 9: capped fee = ${LibraryItem.capFee(shelf.first.lateFee(daysBig))} (cap $feeCap)');
-  print('Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}');
+  print(
+    'Step 9: capped fee = ${LibraryItem.capFee(shelf.first.lateFee(daysBig))} (cap $feeCap)',
+  );
+  print(
+    'Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}',
+  );
   print('Step 9: new copies identical? ${identical(Fine(10), Fine(10))}');
 
   // Think: static belongs to the class not to an object so I can use
