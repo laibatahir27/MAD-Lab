@@ -113,6 +113,19 @@ Dvd mainDvd() {
   return Dvd(titles[i], yearOf(i), 90 + seed % 40);
 }
 
+enum MemberType {
+  student(3, 50),
+  faculty(10, 20),
+  guest(1, 0);
+
+  final int maxLoans;
+  final int discountPercent;
+
+  const MemberType(this.maxLoans, this.discountPercent);
+
+  int applyDiscount(int fee) => fee - (fee * discountPercent) ~/ 100;
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -191,12 +204,20 @@ void step5() {
   print('Step 5: renew once more? ${book.renew(renewLimit)}');
   print('Step 5: dvd can renew too? ${mainDvd().renew(1)}');
 
-  // Think:if renew was in LibraryItem Magazine class would get it too. A mixin(i.e Renewable )
-  // lets me add it only to Book class and Dvd class.
+  // Think: if renew was in LibraryItem, Magazine would get it too. A mixin
+  // lets me add it only to Book and Dvd.
 }
 
 void step6() {
   print('--- Step 6 ---');
+  MemberType type = MemberType.values[seed % 3];
+  int fee = mainBook().lateFee(daysLate);
+  print('Step 6: member type = ${type.name} (index ${type.index})');
+  print('Step 6: max loans = ${type.maxLoans}');
+  print('Step 6: book fee $fee -> ${type.applyDiscount(fee)} after discount');
+
+  // Think:If I mistype MemberType.studnet,Dart shows an error straight away.
+  // A string like 'studnet' gives no error and fails later.Thats why  MemberType.student is safer than the string 'student'
 }
 
 void step7() {
