@@ -19,6 +19,26 @@ final int renewLimit = 1 + t % 3; // renewals allowed per item
 final int renewAttempts = 2 + u; // renewal attempts made in Step 5
 final int shelfSize = 3 + u % 4; // items on the shelf in Steps 9-10
 // ===========================================================================
+
+// Parent class
+class LibraryItem {
+  final String title;
+  final int year;
+
+  LibraryItem(this.title, this.year);
+}
+
+// Book gets title and year from LibraryItem and adds pages
+class Book extends LibraryItem {
+  final int pages;
+
+  Book(super.title, super.year, this.pages);
+}
+
+Book mainBook() {
+  return Book(titles[u], yearOf(u), 100 + 3 * seed);
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -32,7 +52,21 @@ void main() {
   step9();
   step10();
 }
-void step1() { print('--- Step 1 ---'); }
+
+void step1() {
+  print('--- Step 1 ---');
+  Book b = mainBook();
+  LibraryItem item = b;
+  print('Step 1: ${b.title} (${b.year}), ${b.pages} pages');
+  print('Step 1: stored as LibraryItem: ${item.title}');
+  print('Step 1: runtimeType = ${item.runtimeType}');
+
+  // Think:item.pages gives a compile error beacuse the variable type is
+  // LibraryItem and LibraryItem does not have pages Dart checks the variable
+  // type at compile time not the real object type.the object is a Book but
+  // the compiler only sees LibraryItem.
+}
+
 void step2() { print('--- Step 2 ---'); }
 void step3() { print('--- Step 3 ---'); }
 void step4() { print('--- Step 4 ---'); }
