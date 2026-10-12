@@ -31,8 +31,15 @@ abstract class LibraryItem {
   int lateFee(int days);
 }
 
-class Book extends LibraryItem {
+abstract class Borrowable {
+  bool get isAvailable;
+  void borrow();
+  void giveBack();
+}
+
+class Book extends LibraryItem implements Borrowable {
   final int pages;
+  bool _out = false;
 
   Book(super.title, super.year, this.pages);
 
@@ -41,6 +48,19 @@ class Book extends LibraryItem {
 
   @override
   int lateFee(int days) => days * feePerDay;
+
+  @override
+  bool get isAvailable => !_out;
+
+  @override
+  void borrow() {
+    _out = true;
+  }
+
+  @override
+  void giveBack() {
+    _out = false;
+  }
 }
 
 class Magazine extends LibraryItem {
@@ -124,11 +144,26 @@ void step3() {
   print('Step 3: Dvd late fee for $daysLate days = ${mainDvd().lateFee(daysLate)}');
 
   // Think: LibraryItem('x', 2000) gives an error because the class is
-  // abstract. lateFee has no body, so there would be nothing to run.
+  // abstract i.e.no body...lateFee has no body,so there would be nothing to run.
 }
 
 void step4() {
   print('--- Step 4 ---');
+  Book book = mainBook();
+  print('Step 4: available? ${book.isAvailable}');
+  book.borrow();
+  print('Step 4: after borrow? ${book.isAvailable}');
+  book.giveBack();
+  print('Step 4: after return? ${book.isAvailable}');
+
+  List<LibraryItem> items = [book, mainMagazine(), mainDvd()];
+  for (LibraryItem item in items) {
+    print('Step 4: ${item.runtimeType} borrowable? ${item is Borrowable}');
+  }
+
+  // Think: extends would give me ready-made code from Borrowable class but it
+  // has no code,only a promise(contract,implement). Also Book already has one parent, and
+  // Dart allows only one extends at a time..not multiple 
 }
 
 void step5() {
@@ -151,6 +186,6 @@ void step9() {
   print('--- Step 9 ---');
 }
 
-void step10(){
+void step10() {
   print('--- Step 10 ---');
 }
