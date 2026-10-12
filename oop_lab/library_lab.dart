@@ -187,6 +187,20 @@ List<LibraryItem> buildShelf() {
   return shelf;
 }
 
+class Member {
+  final String name;
+  final MemberType type;
+
+  Member(this.name, this.type);
+
+  Fine feeFor(LibraryItem item, int days) {
+    int fee = item.lateFee(days);
+    fee = LibraryItem.capFee(fee);
+    fee = type.applyDiscount(fee);
+    return Fine(fee);
+  }
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -265,8 +279,8 @@ void step5() {
   print('Step 5: renew once more? ${book.renew(renewLimit)}');
   print('Step 5: dvd can renew too? ${mainDvd().renew(1)}');
 
-  // Think: if renew was in LibraryItem, Magazine would get it too. A mixin
-  // lets me add it only to Book and Dvd.
+  // Think: if renew was in LibraryItem Magazine class would get it too. A mixin
+  // lets me add it only to Book class and Dvd class
 }
 
 void step6() {
@@ -291,8 +305,7 @@ void step7() {
   List<LibraryItem> shelf = [mainBook(), mainMagazine(), mainDvd()];
   print('Step 7: shelf fee for $daysLate days = ${shelf.totalLateFee(daysLate).rs}');
 
-  // Think: 72.rs is easier to read and write than rs(72), and it shows up
-  // in autocomplete when I type a dot after the number.
+  // Think: 72.rs is easier to read and write than rs(72), and it shows up in autocomplete when I type a dot after the number.
 }
 
 void step8() {
@@ -305,7 +318,7 @@ void step8() {
   print('Step 8: set size = ${{f1, Fine(f1.amount), f2}.length}');
 
   // Think: without hashCode the set size becomes 3. A Set checks hashCode
-  // first, so two equal Fines with different hash codes are never compared.
+  // first so two equal Fines with different hash codes are never compared.
   // That is why == and hashCode are written together.
 }
 
@@ -319,9 +332,24 @@ void step9() {
   print('Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}');
   print('Step 9: new copies identical? ${identical(Fine(10), Fine(10))}');
 
-  // Think: static belongs to the class not to an object so I can use LibraryItem.created without creating any object.
+  // Think: static belongs to the class not to an object so I can use
+  // LibraryItem.created without creating any object.
 }
 
 void step10() {
   print('--- Step 10 ---');
+  List<LibraryItem> shelf = buildShelf();
+  Member member = Member('S$seed', MemberType.values[seed % 3]);
+
+  Fine total = shelf.fold(
+    const Fine(0),
+    (sum, item) => sum + member.feeFor(item, daysLate),
+  );
+
+  int b = shelf.where((item) => item is Borrowable).length;
+  int r = shelf.where((item) => item is Renewable).length;
+
+  print('Step 10: ${shelf.length} items, $b borrowable, $r renewable');
+  print('Step 10: ${member.name} (${member.type.name}) owes $total');
+  print('Step 10: over the cap? ${total > Fine(feeCap)}');
 }
