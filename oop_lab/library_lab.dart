@@ -126,6 +126,20 @@ enum MemberType {
   int applyDiscount(int fee) => fee - (fee * discountPercent) ~/ 100;
 }
 
+extension MoneyText on int {
+  String get rs => 'Rs $this';
+}
+
+extension Initials on String {
+  String get initials => split(' ').map((w) => w[0]).join();
+}
+
+extension ShelfMath on List<LibraryItem> {
+  int totalLateFee(int days) {
+    return fold(0, (sum, item) => sum + item.lateFee(days));
+  }
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -216,12 +230,21 @@ void step6() {
   print('Step 6: max loans = ${type.maxLoans}');
   print('Step 6: book fee $fee -> ${type.applyDiscount(fee)} after discount');
 
-  // Think:If I mistype MemberType.studnet,Dart shows an error straight away.
-  // A string like 'studnet' gives no error and fails later.Thats why  MemberType.student is safer than the string 'student'
+  // Think: if I mistype MemberType.studnet, Dart shows an error right away.
+  // A string like 'studnet' gives no error and fails later.
 }
 
 void step7() {
   print('--- Step 7 ---');
+  MemberType type = MemberType.values[seed % 3];
+  int discounted = type.applyDiscount(mainBook().lateFee(daysLate));
+  print('Step 7: ${discounted.rs}');
+  print('Step 7: initials of "${titles[u]}" = ${titles[u].initials}');
+
+  List<LibraryItem> shelf = [mainBook(), mainMagazine(), mainDvd()];
+  print('Step 7: shelf fee for $daysLate days = ${shelf.totalLateFee(daysLate).rs}');
+
+  // Think:72.rs is easier to read and write than plain function rs(72) and it shows up in autocomplete when I type a dot after the number 72
 }
 
 void step8() {
