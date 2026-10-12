@@ -37,7 +37,19 @@ abstract class Borrowable {
   void giveBack();
 }
 
-class Book extends LibraryItem implements Borrowable {
+mixin Renewable {
+  int renewals = 0;
+
+  bool renew(int limit) {
+    if (renewals >= limit) {
+      return false;
+    }
+    renewals++;
+    return true;
+  }
+}
+
+class Book extends LibraryItem with Renewable implements Borrowable {
   final int pages;
   bool _out = false;
 
@@ -75,7 +87,7 @@ class Magazine extends LibraryItem {
   int lateFee(int days) => days * (feePerDay ~/ 2);
 }
 
-class Dvd extends LibraryItem {
+class Dvd extends LibraryItem with Renewable {
   final int minutes;
 
   Dvd(super.title, super.year, this.minutes);
@@ -144,7 +156,7 @@ void step3() {
   print('Step 3: Dvd late fee for $daysLate days = ${mainDvd().lateFee(daysLate)}');
 
   // Think: LibraryItem('x', 2000) gives an error because the class is
-  // abstract i.e.no body...lateFee has no body,so there would be nothing to run.
+  // abstract. lateFee has no body, so there would be nothing to run.
 }
 
 void step4() {
@@ -161,13 +173,26 @@ void step4() {
     print('Step 4: ${item.runtimeType} borrowable? ${item is Borrowable}');
   }
 
-  // Think: extends would give me ready-made code from Borrowable class but it
-  // has no code,only a promise(contract,implement). Also Book already has one parent, and
-  // Dart allows only one extends at a time..not multiple 
+  // Think: extends would give me ready-made code from Borrowable, but it
+  // has no code, only a promise. Also Book already has one parent, and
+  // Dart allows only one extends.
 }
 
 void step5() {
   print('--- Step 5 ---');
+  Book book = mainBook();
+  int ok = 0;
+  for (int n = 0; n < renewAttempts; n++) {
+    if (book.renew(renewLimit)) {
+      ok++;
+    }
+  }
+  print('Step 5: renewed $ok of $renewAttempts attempts (limit $renewLimit)');
+  print('Step 5: renew once more? ${book.renew(renewLimit)}');
+  print('Step 5: dvd can renew too? ${mainDvd().renew(1)}');
+
+  // Think:if renew was in LibraryItem Magazine class would get it too. A mixin(i.e Renewable )
+  // lets me add it only to Book class and Dvd class.
 }
 
 void step6() {
