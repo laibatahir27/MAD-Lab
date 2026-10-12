@@ -21,10 +21,21 @@ final int shelfSize = 3 + u % 4; // items on the shelf in Steps 9-10
 // ===========================================================================
 
 abstract class LibraryItem {
+  static int created = 0;
+
+  static int capFee(int fee) {
+    if (fee > feeCap) {
+      return feeCap;
+    }
+    return fee;
+  }
+
   final String title;
   final int year;
 
-  LibraryItem(this.title, this.year);
+  LibraryItem(this.title, this.year) {
+    created++;
+  }
 
   String describe() => '$title ($year)';
 
@@ -161,6 +172,21 @@ class Fine {
   String toString() => 'Fine($amount)';
 }
 
+List<LibraryItem> buildShelf() {
+  List<LibraryItem> shelf = [];
+  for (int k = 0; k < shelfSize; k++) {
+    int i = (u + k) % 10;
+    if (k % 3 == 0) {
+      shelf.add(Book(titles[i], yearOf(i), 100 + 3 * seed));
+    } else if (k % 3 == 1) {
+      shelf.add(Magazine(titles[i], yearOf(i), 1 + (t + k) % 12));
+    } else {
+      shelf.add(Dvd(titles[i], yearOf(i), 90 + seed % 40));
+    }
+  }
+  return shelf;
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -279,11 +305,21 @@ void step8() {
   print('Step 8: set size = ${{f1, Fine(f1.amount), f2}.length}');
 
   // Think: without hashCode the set size becomes 3. A Set checks hashCode
-  // first so two equal Fines with different hash codes are never compared.That's why == and hashCode are written together.
+  // first, so two equal Fines with different hash codes are never compared.
+  // That is why == and hashCode are written together.
 }
 
 void step9() {
   print('--- Step 9 ---');
+  LibraryItem.created = 0;
+  buildShelf();
+  List<LibraryItem> shelf = buildShelf();
+  print('Step 9: items created = ${LibraryItem.created}');
+  print('Step 9: capped fee = ${LibraryItem.capFee(shelf.first.lateFee(daysBig))} (cap $feeCap)');
+  print('Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}');
+  print('Step 9: new copies identical? ${identical(Fine(10), Fine(10))}');
+
+  // Think: static belongs to the class not to an object so I can use LibraryItem.created without creating any object.
 }
 
 void step10() {
