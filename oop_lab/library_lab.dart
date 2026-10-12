@@ -140,6 +140,27 @@ extension ShelfMath on List<LibraryItem> {
   }
 }
 
+class Fine {
+  final int amount;
+
+  const Fine(this.amount);
+
+  Fine operator +(Fine o) => Fine(amount + o.amount);
+
+  bool operator >(Fine o) => amount > o.amount;
+
+  @override
+  bool operator ==(Object other) {
+    return other is Fine && other.amount == amount;
+  }
+
+  @override
+  int get hashCode => amount.hashCode;
+
+  @override
+  String toString() => 'Fine($amount)';
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -244,11 +265,21 @@ void step7() {
   List<LibraryItem> shelf = [mainBook(), mainMagazine(), mainDvd()];
   print('Step 7: shelf fee for $daysLate days = ${shelf.totalLateFee(daysLate).rs}');
 
-  // Think:72.rs is easier to read and write than plain function rs(72) and it shows up in autocomplete when I type a dot after the number 72
+  // Think: 72.rs is easier to read and write than rs(72), and it shows up
+  // in autocomplete when I type a dot after the number.
 }
 
 void step8() {
   print('--- Step 8 ---');
+  Fine f1 = Fine(mainBook().lateFee(daysLate));
+  Fine f2 = Fine(mainMagazine().lateFee(daysLate));
+  print('Step 8: $f1 + $f2 = ${f1 + f2}');
+  print('Step 8: first bigger? ${f1 > f2}');
+  print('Step 8: equal copies? ${f1 == Fine(f1.amount)}');
+  print('Step 8: set size = ${{f1, Fine(f1.amount), f2}.length}');
+
+  // Think: without hashCode the set size becomes 3. A Set checks hashCode
+  // first so two equal Fines with different hash codes are never compared.That's why == and hashCode are written together.
 }
 
 void step9() {
