@@ -20,23 +20,40 @@ final int renewAttempts = 2 + u; // renewal attempts made in Step 5
 final int shelfSize = 3 + u % 4; // items on the shelf in Steps 9-10
 // ===========================================================================
 
-// Parent class
 class LibraryItem {
   final String title;
   final int year;
 
   LibraryItem(this.title, this.year);
+
+  String describe() => '$title ($year)';
 }
 
-// Book gets title and year from LibraryItem and adds pages
 class Book extends LibraryItem {
   final int pages;
 
   Book(super.title, super.year, this.pages);
+
+  @override
+  String describe() => '${super.describe()}, $pages pages';
+}
+
+class Magazine extends LibraryItem {
+  final int issue;
+
+  Magazine(super.title, super.year, this.issue);
+
+  @override
+  String describe() => '${super.describe()}, issue $issue';
 }
 
 Book mainBook() {
   return Book(titles[u], yearOf(u), 100 + 3 * seed);
+}
+
+Magazine mainMagazine() {
+  int i = (u + 1) % 10;
+  return Magazine(titles[i], yearOf(i), 1 + (t + u) % 12);
 }
 
 void main() {
@@ -61,18 +78,48 @@ void step1() {
   print('Step 1: stored as LibraryItem: ${item.title}');
   print('Step 1: runtimeType = ${item.runtimeType}');
 
-  // Think:item.pages gives a compile error beacuse the variable type is
-  // LibraryItem and LibraryItem does not have pages Dart checks the variable
-  // type at compile time not the real object type.the object is a Book but
-  // the compiler only sees LibraryItem.
+  // Think: item.pages gives a compile error because the variable type is
+  // LibraryItem and LibraryItem does not have pages. Dart checks the
+  // variable type at compile time, not the real object type.
 }
 
-void step2() { print('--- Step 2 ---'); }
-void step3() { print('--- Step 3 ---'); }
-void step4() { print('--- Step 4 ---'); }
-void step5() { print('--- Step 5 ---'); }
-void step6() { print('--- Step 6 ---'); }
-void step7() { print('--- Step 7 ---'); }
-void step8() { print('--- Step 8 ---'); }
-void step9() { print('--- Step 9 ---'); }
-void step10() { print('--- Step 10 ---'); }
+void step2() {
+  print('--- Step 2 ---');
+  print('Step 2: ${mainBook().describe()}');
+  print('Step 2: ${mainMagazine().describe()}');
+
+  // Think: without @override, a typo like descibe() just makes a new method.
+  // No error, and the old describe() keeps running, so pages/issue is missing.
+}
+
+void step3() {
+  print('--- Step 3 ---');
+}
+
+void step4() {
+  print('--- Step 4 ---');
+}
+
+void step5() {
+  print('--- Step 5 ---');
+}
+
+void step6() {
+  print('--- Step 6 ---');
+}
+
+void step7() {
+  print('--- Step 7 ---');
+}
+
+void step8() {
+  print('--- Step 8 ---');
+}
+
+void step9() {
+  print('--- Step 9 ---');
+}
+
+void step10() {
+  print('--- Step 10 ---');
+}
