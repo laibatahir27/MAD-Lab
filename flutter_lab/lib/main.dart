@@ -1,5 +1,6 @@
 // main.dart - Study Tracker lab
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 const String studentName = 'Laiba Tahir';
@@ -10,8 +11,16 @@ final int seed = int.parse(rollNo.substring(rollNo.length - 2));
 final int t = seed ~/ 10; // tens digit
 final int u = seed % 10; // units digit
 const List<String> courses = [
-  'Mobile Dev', 'Data Structures', 'Operating Systems', 'Databases',
-  'Networks', 'Software Eng', 'AI', 'Web Engineering', 'Graphics', 'Security',
+  'Mobile Dev',
+  'Data Structures',
+  'Operating Systems',
+  'Databases',
+  'Networks',
+  'Software Eng',
+  'AI',
+  'Web Engineering',
+  'Graphics',
+  'Security',
 ];
 final String course = courses[u]; // your course name
 final int startCount = 3 + u; // where the tally starts
