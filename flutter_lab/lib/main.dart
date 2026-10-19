@@ -101,7 +101,7 @@ class HomePage extends StatelessWidget {
 }
 
 // think: the fields are final because a stateless widget does not change after
-// it is made. if i remove final, the analyzer warns that the class is
+// it is made. if i remove final the analyzer warns that the class is
 // @immutable but its fields are not final.
 class StudentCard extends StatelessWidget {
   final String name;
@@ -133,7 +133,7 @@ class StudentCard extends StatelessWidget {
   }
 }
 
-// think: GoalBanner has no data of its own so it does not need setState.
+// think: GoalBanner has no data of its own, so it does not need setState.
 // to show a new count the parent has to rebuild and pass the new count in.
 class GoalBanner extends StatelessWidget {
   final int count;
@@ -160,12 +160,28 @@ class Tally extends StatefulWidget {
   State<Tally> createState() => _TallyState();
 }
 
+// think: hot reload keeps the State, so the count stays 12. hot restart
+// removes the whole app and its State so the count goes back to startCount.
 class _TallyState extends State<Tally> {
   int _count = startCount;
 
   void _plus() {
     setState(() {
       _count += stepSize;
+      if (_count > maxCount) _count = maxCount;
+    });
+  }
+
+  void _minus() {
+    setState(() {
+      _count -= stepSize;
+      if (_count < 0) _count = 0;
+    });
+  }
+
+  void _reset() {
+    setState(() {
+      _count = startCount;
     });
   }
 
@@ -182,6 +198,18 @@ class _TallyState extends State<Tally> {
               key: const Key('plus'),
               onPressed: _plus,
               child: Text('+$stepSize'),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              key: const Key('minus'),
+              onPressed: _minus,
+              child: Text('-$stepSize'),
+            ),
+            const SizedBox(width: 8),
+            OutlinedButton(
+              key: const Key('reset'),
+              onPressed: _reset,
+              child: const Text('Reset'),
             ),
           ],
         ),
