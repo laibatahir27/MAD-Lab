@@ -226,9 +226,12 @@ class _TallyState extends State<Tally> {
   }
 }
 
-// think: if _timer.cancel() is not in dispose and the widget is removed, the
-// timer keeps running and calls setState on it. the console shows
+// think: if _timer.cancel() is not in dispose and the widget is removed the
+// timer keeps running and calls setState on it.the console shows
 // "setState() called after dispose()".
+// think: build runs once for every setState and the timer calls setState once
+// per second so Builds goes up by 1 each second (not 2). to check dispose
+// ran i can print lifecycleLog with print(lifecycleLog).
 class Countdown extends StatefulWidget {
   const Countdown({super.key});
 
@@ -239,10 +242,12 @@ class Countdown extends StatefulWidget {
 class _CountdownState extends State<Countdown> {
   late int _left;
   late Timer _timer;
+  int _builds = 0;
 
   @override
   void initState() {
     super.initState();
+    lifecycleLog.add('initState');
     _left = startSeconds;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() => _left--);
@@ -253,14 +258,22 @@ class _CountdownState extends State<Countdown> {
   @override
   void dispose() {
     _timer.cancel();
+    lifecycleLog.add('dispose');
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_left > 0) {
-      return Text('Time left: $_left s', key: const Key('time-left'));
-    }
-    return const Text('Time is up!', key: Key('time-left'));
+    _builds++;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (_left > 0)
+          Text('Time left: $_left s', key: const Key('time-left'))
+        else
+          const Text('Time is up!', key: Key('time-left')),
+        Text('Builds: $_builds', key: const Key('builds')),
+      ],
+    );
   }
 }
