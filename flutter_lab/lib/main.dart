@@ -92,7 +92,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            GoalBanner(count: startCount, max: maxCount),
+            const Tally(),
           ],
         ),
       ),
@@ -147,6 +147,45 @@ class GoalBanner extends StatelessWidget {
     return Text(
       'Progress: $count of $max ($percent%)',
       key: const Key('progress'),
+    );
+  }
+}
+
+// think: Tally is just the configuration and it can be recreated again and
+// again. _TallyState keeps the count safe. that is why there are two classes.
+class Tally extends StatefulWidget {
+  const Tally({super.key});
+
+  @override
+  State<Tally> createState() => _TallyState();
+}
+
+class _TallyState extends State<Tally> {
+  int _count = startCount;
+
+  void _plus() {
+    setState(() {
+      _count += stepSize;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Count: $_count', key: const Key('count')),
+        GoalBanner(count: _count, max: maxCount),
+        Row(
+          children: [
+            ElevatedButton(
+              key: const Key('plus'),
+              onPressed: _plus,
+              child: Text('+$stepSize'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
