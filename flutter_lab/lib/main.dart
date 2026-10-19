@@ -32,12 +32,9 @@ class LabApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Step 1 replaces everything below.
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(child: Text('Setup OK: seed $seed (t=$t, u=$u)')),
-      ),
-    );
+    // think: runApp gets the root widget of the whole app (LabApp).
+    // MaterialApp's home gets only the first screen (HomePage).
+    return const MaterialApp(title: 'Study Tracker', home: HomePage());
   }
 }
 
@@ -66,6 +63,18 @@ class _BuggyCounterState extends State<BuggyCounter> {
           child: Text('+$bugStep'),
         ),
       ],
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Study Tracker: $course')),
+      body: const Center(child: Text('Hello')),
     );
   }
 }
