@@ -27,6 +27,7 @@ final List<String> lifecycleLog = <String>[];
 void main() => runApp(const LabApp());
 
 // Keep the name LabApp and its const constructor: the checker uses them.
+// Stateless: LabApp only starts the app, nothing changes in it.
 class LabApp extends StatelessWidget {
   const LabApp({super.key});
 
@@ -39,6 +40,7 @@ class LabApp extends StatelessWidget {
 }
 
 // ---- Provided for Step 7. It has a bug on purpose. Do not rename anything.
+// Stateful: the click number changes.
 class BuggyCounter extends StatefulWidget {
   const BuggyCounter({super.key});
 
@@ -47,7 +49,7 @@ class BuggyCounter extends StatefulWidget {
 }
 
 // think: before the fix, after 3 taps _clicks inside the State was 3
-// (bugStep is 1) but the screen still showed 0 because build did not run again.
+// (bugStep is 1), but the screen still showed 0 because build did not run again.
 class _BuggyCounterState extends State<BuggyCounter> {
   int _clicks = 0;
 
@@ -71,6 +73,7 @@ class _BuggyCounterState extends State<BuggyCounter> {
   }
 }
 
+// Stateless: HomePage just arranges other widgets, no changing data.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -111,6 +114,7 @@ class HomePage extends StatelessWidget {
 // think: the fields are final because a stateless widget does not change after
 // it is made. if i remove final the analyzer warns that the class is
 // @immutable but its fields are not final.
+// Stateless: it only shows the 3 values that are given to it.
 class StudentCard extends StatelessWidget {
   final String name;
   final String roll;
@@ -141,8 +145,9 @@ class StudentCard extends StatelessWidget {
   }
 }
 
-// think: GoalBanner has no data of its own so it does not need setState.
-// to show a new count the parent has to rebuild and pass the new count in.
+// think: GoalBanner has no data of its own, so it does not need setState.
+// to show a new count, the parent has to rebuild and pass the new count in.
+// Stateless: it only shows the count and max given by its parent.
 class GoalBanner extends StatelessWidget {
   final int count;
   final int max;
@@ -161,6 +166,7 @@ class GoalBanner extends StatelessWidget {
 
 // think: Tally is just the configuration and it can be recreated again and
 // again. _TallyState keeps the count safe. that is why there are two classes.
+// Stateful: the count changes when the buttons are pressed.
 class Tally extends StatefulWidget {
   const Tally({super.key});
 
@@ -169,7 +175,7 @@ class Tally extends StatefulWidget {
 }
 
 // think: hot reload keeps the State, so the count stays 12. hot restart
-// removes the whole app and its State so the count goes back to startCount.
+// removes the whole app and its State, so the count goes back to startCount.
 class _TallyState extends State<Tally> {
   int _count = startCount;
 
@@ -227,11 +233,12 @@ class _TallyState extends State<Tally> {
 }
 
 // think: if _timer.cancel() is not in dispose and the widget is removed the
-// timer keeps running and calls setState on it.the console shows
+// timer keeps running and calls setState on it. the console shows
 // "setState() called after dispose()".
-// think: build runs once for every setState and the timer calls setState once
-// per second so Builds goes up by 1 each second (not 2). to check dispose
+// think: build runs once for every setState, and the timer calls setState once
+// per second, so Builds goes up by 1 each second (not 2). to check dispose
 // ran i can print lifecycleLog with print(lifecycleLog).
+// Stateful: seconds left and builds keep changing.
 class Countdown extends StatefulWidget {
   const Countdown({super.key});
 
