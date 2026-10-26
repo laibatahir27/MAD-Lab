@@ -95,7 +95,11 @@ class HomePage extends StatelessWidget {
           children: [
             const SettingsCard(),
             const SizedBox(height: 12),
+            const Welcome(),
+            const SizedBox(height: 12),
             const Clock(),
+            const SizedBox(height: 12),
+            Row(children: [Tile(tileA), Tile(tileB), Tile(tileC)]),
             const SizedBox(height: 12),
           ],
         ),
@@ -226,6 +230,40 @@ class Probe extends StatelessWidget {
             key: const Key('probe-context')),
         Text('Scaffold above me: $above', key: const Key('probe-above')),
       ],
+    );
+  }
+}
+
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Welcome, $studentName', key: const Key('welcome')),
+    );
+  }
+}
+
+class Tile extends StatefulWidget {
+  const Tile(this.label, {super.key});
+  final String label;
+
+  @override
+  State<Tile> createState() => _TileState();
+}
+
+class _TileState extends State<Tile> {
+  int taps = 0;
+
+  // Think: This style is called composition. Flutter prefers it because we
+  // just combine small existing widgets instead of making a new subclass for
+  // every look, so the code stays simple and easy to reuse.
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => setState(() => taps++),
+      child: Text('${widget.label}: $taps'),
     );
   }
 }
