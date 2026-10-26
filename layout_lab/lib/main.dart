@@ -103,6 +103,8 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 12),
             const InfoPanel(),
             const SizedBox(height: 12),
+            const SummaryRow(),
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -135,21 +137,31 @@ class SettingsCard extends StatelessWidget {
 class SummaryRow extends StatelessWidget {
   const SummaryRow({super.key});
 
+  // Think: Constraints go down, sizes go up. A plain Row lets each Text be as
+  // wide as it wants, so the three long texts together are wider than the
+  // screen. Expanded gives each Text an equal share of the width, so the Text
+  // has to fit inside it and wraps its words onto more lines.
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          'Part A: read the widget tree of the $course board from top to bottom.',
-          key: const Key('sum-a'),
+        Expanded(
+          child: Text(
+            'Part A: read the widget tree of the $course board from top to bottom.',
+            key: const Key('sum-a'),
+          ),
         ),
-        Text(
-          'Part B: build each box from small widgets and never extend a built-in class.',
-          key: const Key('sum-b'),
+        Expanded(
+          child: Text(
+            'Part B: build each box from small widgets and never extend a built-in class.',
+            key: const Key('sum-b'),
+          ),
         ),
-        Text(
-          'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
-          key: const Key('sum-c'),
+        Expanded(
+          child: Text(
+            'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
+            key: const Key('sum-c'),
+          ),
         ),
       ],
     );
